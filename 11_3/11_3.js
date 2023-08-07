@@ -3,16 +3,15 @@ const message_area=document.querySelector('.message_area');
 const btn_send=document.querySelector('.btn_send');
 const btn_geo=document.querySelector('.btn_geo');
 
-let socket = new WebSocket("wss://echo.websocket.org/");
+let socket = new WebSocket("wss://echo.websocket.events");
 
-socket.onopen = function(e) {
-  alert("[open] Соединение установлено");
-  alert("Отправляем данные на сервер");
-  socket.send("Меня зовут Джон");
+socket.onopen = function(event) {
+  console.log("CONNECTED");
 };
 
 socket.onmessage = function(event) {
-  alert(`[message] Данные получены с сервера: ${event.data}`);
+  console.log(event.data);
+  addMessage(event.data, 'flex-start');
 };
 
 socket.onclose = function(event) {
@@ -26,8 +25,15 @@ socket.onclose = function(event) {
 };
 
 socket.onerror = function(error) {
-  alert(`[error]`);
+  console.log(error.data)
 };
+
+btn_send.addEventListener('click', () => {
+        let message = input_message.value;
+        socket.send(message);
+        addMessage(message);
+        input_message.value = ''
+    })
 
 function addMessage(message, position='flex-end') {
   let element = `
@@ -63,8 +69,6 @@ function addLink(link) {
       let chat = message_area.innerHTML;
       message_area.innerHTML = chat + element;
     };
-
-
 
 btn_geo.addEventListener('click', ()=>{
   if ("geolocation" in navigator) {
