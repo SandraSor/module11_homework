@@ -62,7 +62,7 @@ function addLink(link) {
   let element = `
     <a  href='${link}'
       target='_blank'
-      style='text-decoration: none;'
+      style='text-decoration: none; align-self:flex-end;'
     >
       Гео-позиция
     </a>`;
